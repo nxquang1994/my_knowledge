@@ -1,0 +1,13 @@
+// This is some common command set up AKS
+
+RG_AKS=AZ500LAB09
+
+AKS_VNET_NAME=AZ500LAB09-vnet
+
+AKS_CLUSTER_NAME=MyKubernetesCluster
+
+AKS_VNET_ID=$(az network vnet show --name $AKS_VNET_NAME --resource-group $RG_AKS --query id -o tsv) // Get command in string return Vnet paht which is used for scope
+
+AKS_MANAGED_ID=$(az aks show --name $AKS_CLUSTER_NAME --resource-group $RG_AKS --query identity.principalId -o tsv) // Get the AKS id
+
+az role assignment create --assignee $AKS_MANAGED_ID --role "Contributor" --scope $AKS_VNET_ID // Assign Vnet to AKS
